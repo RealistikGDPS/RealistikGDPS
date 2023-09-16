@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: realistikgdps-service
+spec:
+  selector:
+    app: realistikgdps
+  type: LoadBalancer
+  ports:
+  # FIXME
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    nodePort: 30069

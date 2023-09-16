@@ -37,3 +37,7 @@ converter:
 
 lint:
 	pre-commit run --all-files
+
+upload:
+	docker build -t ${USER}/realistikgdps:latest .
+	docker push ${USER}/realistikgdps:latest

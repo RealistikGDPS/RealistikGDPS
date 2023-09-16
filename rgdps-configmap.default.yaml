@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: realistikgdps-configmap
+data:
+  HTTP_PORT: "80"
+  HTTP_HOST: 0.0.0.0
+  HTTP_URL_PREFIX: /database
+  SQL_USER: rgdps
+  SQL_PASS: rgdps
+  SQL_HOST: mysql
+  SQL_DB: rgdps
+  SQL_PORT: "3306"
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  MEILI_HOST: meilisearch
+  MEILI_PORT: "7700"
+  MEILI_KEY: masterkey
+  SERVICE_READINESS_TIMEOUT: "30"
+  SRV_NAME: RealistikGDPS
+  S3_ENABLED: "0"
+  S3_BUCKET: ""
+  S3_REGION: ""
+  S3_ENDPOINT: ""
+  S3_ACCESS_KEY: ""
+  S3_SECRET_KEY: ""
+  LOCAL_ROOT: "/data"
+  APP_COMPONENT: "api"

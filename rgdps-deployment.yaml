@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realistikgdps-deployment
+spec:
+  selector:
+    matchLabels:
+      app: realistikgdps
+  template:
+    metadata:
+      labels:
+        app: realistikgdps
+    spec:
+      containers:
+      - name: realistikgdps
+        image: realistikdash/realistikgdps:latest
+        ports:
+        - containerPort: 80
+        env:
+          - name: KUBERNETES
+            value: "1"
+          - name: SRV_STATELESS
+            value: "1"
+          
+          # From Configmap
+          - name: HTTP_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: HTTP_HOST
+          - name: HTTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: HTTP_PORT
+          - name: HTTP_URL_PREFIX
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: HTTP_URL_PREFIX
+          - name: SQL_USER
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SQL_USER
+          - name: SQL_PASS
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SQL_PASS
+          - name: SQL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SQL_HOST
+          - name: SQL_DB
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SQL_DB
+          - name: SQL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SQL_PORT
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: REDIS_PORT
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: REDIS_DB
+          - name: MEILI_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: MEILI_HOST
+          - name: MEILI_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: MEILI_KEY
+          - name: SERVICE_READINESS_TIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SERVICE_READINESS_TIMEOUT
+          - name: SRV_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: SRV_NAME
+          - name: S3_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_ENABLED
+          - name: S3_BUCKET
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_BUCKET
+          - name: S3_REGION
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_REGION
+          - name: S3_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_ENDPOINT
+          - name: S3_ACCESS_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_ACCESS_KEY
+          - name: S3_SECRET_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: S3_SECRET_KEY
+          - name: LOCAL_ROOT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: LOCAL_ROOT
+          - name: APP_COMPONENT
+            valueFrom:
+              configMapKeyRef:
+                name: realistikgdps-configmap
+                key: APP_COMPONENT

@@ -44,6 +44,8 @@ services:
       - SQL_DB=${SQL_DB}
       - SQL_PORT=${SQL_PORT}
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
       - MEILI_HOST=${MEILI_HOST}
       - MEILI_PORT=${MEILI_PORT}
       - MEILI_KEY=${MEILI_KEY}

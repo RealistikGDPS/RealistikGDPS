@@ -137,3 +137,6 @@ mysql_data/
 meilisearch_data/
 redis_data/
 rgdps_data/
+
+# k8s
+rgdps-configmap.yaml
