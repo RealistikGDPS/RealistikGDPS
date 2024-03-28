@@ -6,7 +6,6 @@ email-validator == 2.0.0
 fastapi == 0.108.0
 fastapi-limiter == 0.1.5
 httpx == 0.26.0
-logzio-python-handler == 4.1.0
 meilisearch-python-sdk == 2.0.1
 python-multipart
 redis == 4.6.0

@@ -37,9 +37,6 @@ class Config:
     s3_secret_key: str = ""
     local_root: str = "/data"
     log_level: str = "INFO"
-    logzio_enabled: bool = False
-    logzio_token: str = ""
-    logzio_url: str = "https://listener.logz.io:8071"
 
 
 def read_config_json() -> dict[str, Any]:

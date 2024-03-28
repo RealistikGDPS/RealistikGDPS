@@ -32,14 +32,7 @@ from rgdps.services.storage import S3Storage
 
 
 def init_logging() -> None:
-    if config.logzio_enabled:
-        logger.init_logzio_logging(
-            config.logzio_token,
-            config.log_level,
-            config.logzio_url,
-        )
-    else:
-        logger.init_basic_logging(config.log_level)
+    logger.init_basic_logging(config.log_level)
 
 
 def init_events(app: FastAPI) -> None:
