@@ -7,7 +7,7 @@ from collections.abc import Callable
 
 from redis.asyncio import Redis
 
-from rgdps import logger
+import logging
 from rgdps.common.context import Context
 
 RedisHandler = Callable[[Context, bytes], Awaitable[None]]
@@ -22,7 +22,7 @@ async def _listen_router(
     async with redis.pubsub() as pubsub:
         for channel in redis_handlers:
             await pubsub.subscribe(channel)
-            logger.debug(
+            logging.debug(
                 "Subscribed to Redis a channel.",
                 extra={
                     "channel": channel.decode(),
@@ -41,7 +41,7 @@ async def _listen_router(
                     handler = redis_handlers[message["channel"]]
                     await handler(ctx, message["data"])
                 except Exception:
-                    logger.exception(
+                    logging.exception(
                         "Error while handling Redis message.",
                         extra={
                             "channel": message["channel"].decode(),
@@ -94,7 +94,7 @@ class RedisPubsubRouter:
     def merge(self, other: RedisPubsubRouter) -> None:
         for channel, handler in other.route_map().items():
             if channel in self._routes:
-                logger.warning(
+                logging.warning(
                     "Overwritten route when merging Redis routers!",
                     extra={
                         "channel": channel.decode(),

@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.common import gd_obj
@@ -20,7 +20,7 @@ async def leaderboard_get(
     leaderboard = await leaderboards.get(ctx, leaderboard_type)
 
     if isinstance(leaderboard, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to load the leaderboard.",
             extra={
                 "leaderboard_type": leaderboard_type.value,
@@ -29,7 +29,7 @@ async def leaderboard_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully fetched the leaderboard.",
         extra={
             "leaderboard_type": leaderboard_type.value,

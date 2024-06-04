@@ -3,7 +3,7 @@ from __future__ import annotations
 import urllib.parse
 from datetime import timedelta
 
-from rgdps import logger
+import logging
 from rgdps.common import modelling
 from rgdps.common.context import Context
 from rgdps.constants.songs import SongSource
@@ -178,7 +178,7 @@ async def get_cdn_url(ctx: Context) -> str | None:
     if cached is not None:
         return cached.decode()
 
-    logger.debug("CDN URL cache miss. Querying the servers.")
+    logging.debug("CDN URL cache miss. Querying the servers.")
 
     queried_url = await ctx.gd.get_cdn_url()
 

@@ -5,7 +5,7 @@ from datetime import datetime
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
@@ -34,7 +34,7 @@ async def song_info_get(
 ):
     song = await songs.get(ctx, song_id)
     if isinstance(song, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to fetch song.",
             extra={
                 "song_id": song_id,
@@ -43,7 +43,7 @@ async def song_info_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully fetched song.",
         extra={
             "song_id": song_id,
@@ -108,7 +108,7 @@ async def level_post(
     )
 
     if isinstance(level, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to upload level.",
             extra={
                 "user_id": user.id,
@@ -118,7 +118,7 @@ async def level_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully uploaded/updated level.",
         extra={
             "user_id": user.id,
@@ -180,7 +180,7 @@ async def levels_get(
     )
 
     if isinstance(level_res, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to search levels.",
             extra={
                 "query": query,
@@ -200,7 +200,7 @@ async def levels_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully searched levels.",
         extra={
             "query": query,
@@ -248,7 +248,7 @@ async def level_get(
     )
 
     if isinstance(level_res, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to fetch level.",
             extra={
                 "level_id": level_id,
@@ -257,7 +257,7 @@ async def level_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully fetched level.",
         extra={
             "level_id": level_res.level.id,
@@ -303,7 +303,7 @@ async def suggest_level_stars(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to suggest stars.",
             extra={
                 "user_id": user.id,
@@ -315,7 +315,7 @@ async def suggest_level_stars(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully suggested stars.",
         extra={
             "user_id": user.id,
@@ -344,7 +344,7 @@ async def level_desc_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to update description.",
             extra={
                 "user_id": user.id,
@@ -355,7 +355,7 @@ async def level_desc_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully updated description.",
         extra={
             "user_id": user.id,
@@ -381,7 +381,7 @@ async def level_delete_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to delete level.",
             extra={
                 "user_id": user.id,
@@ -391,7 +391,7 @@ async def level_delete_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully deleted level.",
         extra={
             "user_id": user.id,
@@ -415,7 +415,7 @@ async def daily_level_info_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to fetch current level.",
             extra={
                 "query_type": query_type.value,
@@ -424,7 +424,7 @@ async def daily_level_info_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully fetched current level.",
         extra={
             "query_type": query_type.value,
@@ -451,7 +451,7 @@ async def demon_difficulty_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to set demon difficulty.",
             extra={
                 "user_id": user.id,
@@ -462,7 +462,7 @@ async def demon_difficulty_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully set demon difficulty.",
         extra={
             "user_id": user.id,
@@ -480,7 +480,7 @@ async def custom_content_cdn_get(
     result = await songs.get_custom_content_url(ctx)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to serve custom content CDN url.",
             extra={
                 "error": result.value,
@@ -488,6 +488,6 @@ async def custom_content_cdn_get(
         )
         return responses.fail()
 
-    logger.info("Successfully served custom content CDN url.")
+    logging.info("Successfully served custom content CDN url.")
 
     return result

@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import commands
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
@@ -33,7 +33,7 @@ async def user_comments_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view user comments.",
             extra={
                 "error": result.value,
@@ -49,7 +49,7 @@ async def user_comments_get(
     )
     response += "#" + gd_obj.create_pagination_info(result.total, page, PAGE_SIZE)
 
-    logger.info(
+    logging.info(
         "Successfully viewed user comments.",
         extra={
             "target_id": target_id,
@@ -87,7 +87,7 @@ async def user_comments_post(
     result = await user_comments.create(ctx, user.id, content)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to post user comment.",
             extra={
                 "error": result.value,
@@ -96,7 +96,7 @@ async def user_comments_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully posted a user comment.",
         extra={
             "user_id": user.id,
@@ -133,7 +133,7 @@ async def like_target_post(
         raise NotImplementedError
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             f"Failed to like/dislike target.",
             extra={
                 "user_id": user.id,
@@ -145,7 +145,7 @@ async def like_target_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully liked/disliked target.",
         extra={
             "like_id": result.id,
@@ -162,7 +162,7 @@ async def user_comment_delete(
     result = await user_comments.delete(ctx, user.id, comment_id)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to delete user comment.",
             extra={
                 "user_id": user.id,
@@ -172,7 +172,7 @@ async def user_comment_delete(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully deleted comment.",
         extra={
             "user_id": user.id,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
@@ -33,7 +33,7 @@ async def friend_requests_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view friend request list.",
             extra={
                 "user_id": user.id,
@@ -57,7 +57,7 @@ async def friend_requests_get(
     )
     response += "#" + gd_obj.create_pagination_info(result.total, page, PAGE_SIZE)
 
-    logger.info(
+    logging.info(
         "Successfully viewed friend requests list.",
         extra={
             "user_id": user.id,
@@ -81,7 +81,7 @@ async def friend_request_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to send a friend request.",
             extra={
                 "user_id": user.id,
@@ -91,7 +91,7 @@ async def friend_request_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully sent a friend request.",
         extra={
             "user_id": user.id,
@@ -114,7 +114,7 @@ async def friend_request_read(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to mark friend request as seen.",
             extra={
                 "user_id": user.id,
@@ -124,7 +124,7 @@ async def friend_request_read(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully marked friend request as seen.",
         extra={
             "user_id": user.id,
@@ -154,7 +154,7 @@ async def friend_requests_delete(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to delete friend requests.",
             extra={
                 "user_id": user.id,
@@ -166,7 +166,7 @@ async def friend_requests_delete(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully deleted friend requests.",
         extra={
             "user_id": user.id,
@@ -192,7 +192,7 @@ async def friend_request_accept(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to accept friend request.",
             extra={
                 "user_id": user.id,
@@ -203,7 +203,7 @@ async def friend_request_accept(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully accepted friend request.",
         extra={
             "user_id": user.id,
@@ -226,7 +226,7 @@ async def user_relationships_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view relationships list.",
             extra={
                 "user_id": user.id,
@@ -251,7 +251,7 @@ async def user_relationships_get(
 
     # Mark them as seen.
     await user_relationships.mark_all_as_seen(ctx, user.id, relationship_type)
-    logger.info(
+    logging.info(
         "Successfully viewed relationship list.",
         extra={
             "user_id": user.id,
@@ -275,7 +275,7 @@ async def friend_remove_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to remove friend.",
             extra={
                 "user_id": user.id,
@@ -285,7 +285,7 @@ async def friend_remove_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully removed friend.",
         extra={
             "user_id": user.id,
@@ -309,7 +309,7 @@ async def block_user_post(
     )
     # TODO: Temp.
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             f"Failed remove friend.",
         )
         return responses.fail()
@@ -322,7 +322,7 @@ async def block_user_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to block user.",
             extra={
                 "user_id": user.id,
@@ -332,7 +332,7 @@ async def block_user_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully blocked user.",
         extra={
             "user_id": user.id,
@@ -356,7 +356,7 @@ async def unblock_user_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to unblock user.",
             extra={
                 "user_id": user.id,
@@ -366,7 +366,7 @@ async def unblock_user_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully unblocked user.",
         extra={
             "user_id": user.id,

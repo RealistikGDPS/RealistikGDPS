@@ -33,6 +33,7 @@ services:
       - mysql
       - redis
       - meilisearch
+      - datadog
     restart: always
     environment:
       - APP_PORT=${APP_PORT}
@@ -65,10 +66,16 @@ services:
       - SERVER_GD_URL=${SERVER_GD_URL}
       - SERVER_STATELESS=${SERVER_STATELESS}
 
-      - LOG_LEVEL=${LOG_LEVEL}
-      - LOGZIO_ENABLED=${LOGZIO_ENABLED}
-      - LOGZIO_TOKEN=${LOGZIO_TOKEN}
-      - LOGZIO_URL=${LOGZIO_URL}
+      - DD_ENABLED=${DD_ENABLED}
+      - DD_HOST=${DD_HOST}
+      - DD_PORT=${DD_PORT}
+      - DD_STATS_HOST=${DD_STATS_HOST}
+      - DD_STATS_PORT=${DD_STATS_PORT}
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=${DD_SITE}
+      - DD_LOGS_INJECTION=true
+      - DD_SERVICE=realistikgdps
+      - DD_LOGS_ENABLED=true
 
       # Internal docker specific variables
       - INTERNAL_RGDPS_DIRECTORY=/data # NOTE: Ensure this matches the volume mount below.
@@ -98,3 +105,22 @@ services:
       - UPLOAD_LIMIT=500M
     depends_on:
       - mysql
+
+  datadog:
+    image: gcr.io/datadoghq/agent:7
+    ports:
+      - "8125:8125/udp"
+      - "8126:8126"
+    environment:
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=${DD_SITE}
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_TRACE_ENABLED=true
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - .:/data
+      - ./datadog/conf.d:/etc/datadog-agent/conf.d

@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi import Form
 from fastapi import Request
 
-from rgdps import logger
+import logging
 from rgdps import settings
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
@@ -23,7 +23,7 @@ async def save_data_get(
     data = await save_data.get(ctx, user.id)
 
     if isinstance(data, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to fetch save data.",
             extra={
                 "user_id": user.id,
@@ -32,7 +32,7 @@ async def save_data_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully fetched save data.",
         extra={
             "user_id": user.id,
@@ -57,7 +57,7 @@ async def save_data_post(
     )
 
     if isinstance(res, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to write save data.",
             extra={
                 "user_id": user.id,
@@ -66,7 +66,7 @@ async def save_data_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully wrote save data.",
         extra={
             "user_id": user.id,

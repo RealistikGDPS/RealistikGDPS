@@ -1,0 +1,28 @@
+version: 1
+disable_existing_loggers: true
+loggers:
+  httpx:
+    level: WARNING
+    handlers: [console, file]
+    propagate: no
+  httpcore:
+    level: WARNING
+    handlers: [console, file]
+    propagate: no
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: plaintext
+    stream: ext://sys.stdout
+  file:
+    class: logging.FileHandler
+    formatter: json
+    filename: logs.log
+formatters:
+  plaintext:
+    format: '%(asctime)s %(name)s %(levelname)s %(message)s'
+  json:
+    class: pythonjsonlogger.jsonlogger.JsonFormatter
+    format: '%(asctime)s %(name)s %(levelname)s %(message)s'
+root:
+  handlers: [console, file]

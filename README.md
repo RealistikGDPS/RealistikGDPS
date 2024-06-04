@@ -12,7 +12,6 @@ It is written in asynchronous, modern Python and is meant as a replacement for o
 - MeiliSearch, allowing for typo tolerance
 - S3 support, allowing for flexible storage solutions
 - Proper ratelimiting
-- Logz.io logging support
 - Flexible command framework
 
 ## How to set up?

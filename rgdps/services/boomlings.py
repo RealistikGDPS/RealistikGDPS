@@ -5,7 +5,7 @@ from typing import Any
 
 import httpx
 
-from rgdps import logger
+import logging
 from rgdps.common import gd_obj
 
 
@@ -120,7 +120,7 @@ class GeometryDashClient:
     ) -> GDStatus[str]:
         request_url = self.server_url + endpoint
 
-        logger.debug(
+        logging.debug(
             "Making a POST request to the Geometry Dash servers.",
             extra={
                 "endpoint": endpoint,
@@ -134,7 +134,7 @@ class GeometryDashClient:
 
         content = response.content.decode().strip()
 
-        logger.debug(
+        logging.debug(
             "POST request to Geometry Dash server succeeded.",
             extra={
                 "endpoint": endpoint,
@@ -152,7 +152,7 @@ class GeometryDashClient:
     async def __make_get_request(self, endpoint: str) -> GDStatus[str]:
         request_url = self.server_url + endpoint
 
-        logger.debug(
+        logging.debug(
             "Making a GET request to the Geometry Dash servers.",
             extra={
                 "endpoint": endpoint,
@@ -165,7 +165,7 @@ class GeometryDashClient:
 
         content = response.content.decode().strip()
 
-        logger.debug(
+        logging.debug(
             "GET request to Geometry Dash server succeeded.",
             extra={
                 "endpoint": endpoint,
@@ -194,7 +194,7 @@ class GeometryDashClient:
 
         if isinstance(song_info, GDRequestStatus):
             if song_info.is_severe_error:
-                logger.warning(
+                logging.warning(
                     "Fetching song from the official servers failed with error.",
                     extra={
                         "song_id": song_id,
@@ -223,7 +223,7 @@ class GeometryDashClient:
 
         if isinstance(song_info, GDRequestStatus):
             if song_info.is_severe_error:
-                logger.warning(
+                logging.warning(
                     "Fetching the CDN from the official servers failed with error.",
                     extra={
                         "error": song_info.value,

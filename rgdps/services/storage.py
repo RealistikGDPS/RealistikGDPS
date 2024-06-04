@@ -8,7 +8,7 @@ from abc import abstractmethod
 from aiobotocore.config import AioConfig
 from aiobotocore.session import get_session
 
-from rgdps import logger
+import logging
 
 
 class AbstractStorage(ABC):
@@ -100,7 +100,7 @@ class S3Storage(AbstractStorage):
                 return
             except Exception as e:
                 sleep_time = i * 2
-                logger.warning(
+                logging.warning(
                     "Failed to save to S3. Retrying...",
                     extra={
                         "key": key,
@@ -110,7 +110,7 @@ class S3Storage(AbstractStorage):
                 )
                 await asyncio.sleep(sleep_time)
 
-        logger.error(
+        logging.error(
             "Failed to save to S3 after retries.",
             extra={
                 "key": key,

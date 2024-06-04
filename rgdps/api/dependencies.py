@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from collections.abc import Awaitable
 from collections.abc import Callable
 
@@ -7,7 +9,6 @@ from fastapi import Depends
 from fastapi import Form
 from fastapi.exceptions import HTTPException
 
-from rgdps import logger
 from rgdps import usecases
 from rgdps.api.context import HTTPContext
 from rgdps.constants.errors import ServiceError
@@ -35,7 +36,7 @@ def authenticate_dependency(
         )
 
         if isinstance(user, ServiceError):
-            logger.debug(
+            logging.debug(
                 "Authentication failed for user.",
                 extra={
                     "user_id": user_id,
@@ -50,7 +51,7 @@ def authenticate_dependency(
         if required_privileges is not None and not (
             user.privileges & required_privileges == required_privileges
         ):
-            logger.debug(
+            logging.debug(
                 "Authentication failed for user due to insufficient privileges.",
                 extra={
                     "user_id": user_id,
@@ -85,7 +86,7 @@ def password_authenticate_dependency(
         )
 
         if isinstance(user, ServiceError):
-            logger.debug(
+            logging.debug(
                 "Authentication failed for user.",
                 extra={
                     "username": username,
@@ -100,7 +101,7 @@ def password_authenticate_dependency(
         if required_privileges is not None and not (
             user.privileges & required_privileges == required_privileges
         ):
-            logger.debug(
+            logging.debug(
                 "Authentication failed for user due to insufficient privileges.",
                 extra={
                     "username": username,

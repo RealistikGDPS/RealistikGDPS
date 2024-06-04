@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
@@ -30,7 +30,7 @@ async def daily_chest_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to fetch daily chest.",
             extra={
                 "user_id": user.id,
@@ -54,7 +54,7 @@ async def daily_chest_get(
     encrypted_result = gd_obj.encrypt_chest_response(result)
     security_hash = gd_obj.create_chest_security_str(encrypted_result.response)
 
-    logger.info(
+    logging.info(
         "Successfully fetched daily chest.",
         extra={
             "user_id": user.id,

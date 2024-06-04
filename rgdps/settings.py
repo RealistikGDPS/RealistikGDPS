@@ -50,6 +50,10 @@ SERVER_STATELESS = read_boolean(os.environ["SERVER_STATELESS"])
 
 LOG_LEVEL = os.environ["LOG_LEVEL"]
 
-LOGZIO_ENABLED = read_boolean(os.environ["LOGZIO_ENABLED"])
-LOGZIO_TOKEN = os.environ["LOGZIO_TOKEN"]
-LOGZIO_URL = os.environ["LOGZIO_URL"]
+DD_ENABLED = read_boolean(os.environ["DD_ENABLED"])
+DD_HOST = os.environ["DD_HOST"]
+DD_PORT = int(os.environ["DD_PORT"])
+DD_STATS_HOST = os.environ["DD_STATS_HOST"]
+DD_STATS_PORT = int(os.environ["DD_STATS_PORT"])
+DD_API_KEY = os.environ["DD_API_KEY"]
+DD_SITE = os.environ["DD_SITE"]

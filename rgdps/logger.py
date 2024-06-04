@@ -3,81 +3,27 @@ from __future__ import annotations
 import logging.config
 import sys
 import threading
+import yaml
 from collections.abc import Callable
 from types import TracebackType
 from typing import Any
 from typing import Optional
 
-# TODO: Look into more customisability.
-_LOGGING_CONFIG = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "logzioFormat": {
-            "format": '{"additional_field": "value"}',
-            "validate": False,
-        },
-    },
-    "handlers": {
-        "logzio": {
-            "class": "logzio.handler.LogzioHandler",
-            "level": "DEBUG",
-            "formatter": "logzioFormat",
-            "token": "",
-            "logzio_type": "python",
-            "logs_drain_timeout": 5,
-            "url": "",
-        },
-    },
-    "loggers": {
-        "rgdps": {
-            "level": "DEBUG",
-            "handlers": ["logzio"],
-            "propagate": True,
-        },
-    },
-}
+def configure_logging(log_level: str | int) -> None:
+    with open("logging.yaml") as f:
+        config = yaml.safe_load(f.read())
 
+        # dynamically map levels for each handler 
+        for handler in config["handlers"].values():
+            handler["level"] = log_level
 
-LOGGER = logging.getLogger("rgdps")
+        config["root"]["level"] = log_level
 
+        logging.config.dictConfig(config)
 
 def init_basic_logging(log_level: str | int) -> None:
-    logging.basicConfig(level=log_level)
+    configure_logging(log_level)
     hook_exception_handlers()
-
-
-def init_logzio_logging(logzio_token: str, log_level: str, logzio_url: str) -> None:
-    _LOGGING_CONFIG["handlers"]["logzio"]["token"] = logzio_token
-    _LOGGING_CONFIG["loggers"]["rgdps"]["level"] = log_level
-    _LOGGING_CONFIG["handlers"]["logzio"]["url"] = logzio_url
-
-    logging.config.dictConfig(_LOGGING_CONFIG)
-    hook_exception_handlers()
-
-
-def debug(*args, **kwargs) -> None:
-    return LOGGER.debug(*args, **kwargs)
-
-
-def info(*args, **kwargs) -> None:
-    return LOGGER.info(*args, **kwargs)
-
-
-def warning(*args, **kwargs) -> None:
-    return LOGGER.warning(*args, **kwargs)
-
-
-def error(*args, **kwargs) -> None:
-    return LOGGER.error(*args, **kwargs)
-
-
-def critical(*args, **kwargs) -> None:
-    return LOGGER.critical(*args, **kwargs)
-
-
-def exception(*args, **kwargs) -> None:
-    return LOGGER.exception(*args, **kwargs)
 
 
 # Hooking the exception handler to log uncaught exceptions.
@@ -100,7 +46,7 @@ def internal_exception_handler(
     exc_value: BaseException,
     exc_traceback: TracebackType | None,
 ) -> Any:
-    LOGGER.exception(
+    logging.exception(
         "An unhandled exception occurred!",
         exc_info=(exc_type, exc_value, exc_traceback),
     )
@@ -110,13 +56,13 @@ def internal_thread_exception_handler(
     args: threading.ExceptHookArgs,
 ) -> Any:
     if args.exc_value is not None:
-        LOGGER.exception(
+        logging.exception(
             "An unhandled exception occurred!",
             exc_info=(args.exc_type, args.exc_value, args.exc_traceback),
             extra={"thread_vars": vars(args.thread)},
         )
     else:
-        LOGGER.warning(
+        logging.warning(
             "A thread exception hook was called without an exception value!",
             extra={
                 "exc_type": args.exc_type,

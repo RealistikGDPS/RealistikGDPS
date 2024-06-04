@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import commands
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
@@ -52,7 +52,7 @@ async def create_comment_post(
     )
 
     if isinstance(comment, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to post level comment.",
             extra={
                 "user_id": user.id,
@@ -64,7 +64,7 @@ async def create_comment_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully posted level comment.",
         extra={
             "comment_id": comment.id,
@@ -89,7 +89,7 @@ async def level_comments_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to load level comments.",
             extra={
                 "level_id": level_id,
@@ -111,7 +111,7 @@ async def level_comments_get(
     )
     response += "#" + gd_obj.create_pagination_info(result.total, page, page_size)
 
-    logger.info(
+    logging.info(
         "Successfully loaded level comments.",
         extra={
             "level_id": level_id,
@@ -137,7 +137,7 @@ async def comment_history_get(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to load level comment history.",
             extra={
                 "user_id": user_id,
@@ -163,7 +163,7 @@ async def comment_history_get(
     )
     response += "#" + gd_obj.create_pagination_info(result.total, page, page_size)
 
-    logger.info(
+    logging.info(
         "Successfully loaded level comment history.",
         extra={
             "user_id": user_id,
@@ -189,7 +189,7 @@ async def level_comment_delete(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to delete level comment.",
             extra={
                 "user_id": user.id,
@@ -199,7 +199,7 @@ async def level_comment_delete(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully deleted level comment.",
         extra={
             "user_id": user.id,

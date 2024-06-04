@@ -14,7 +14,7 @@ from typing import get_args
 from typing import get_origin
 from typing import get_type_hints
 
-from rgdps import logger
+import logging
 from rgdps import repositories
 from rgdps.common.context import Context
 from rgdps.constants.errors import ServiceError
@@ -107,7 +107,7 @@ async def _resolve_from_type[T](ctx: CommandContext, value: str, cast: type[T]) 
     elif issubclass(cast, Enum):
         return cast(value)
 
-    logger.error(
+    logging.error(
         "Command parser tried to parse an unsupported type!",
         extra={
             "value": value,
@@ -323,7 +323,7 @@ class CommandRouter(CommandRoutable):
 
         for key, value in router._routes.items():
             if key in self._routes:
-                logger.warning(
+                logging.warning(
                     "Command router merge has overwritten an existing command!",
                     extra={
                         "command": key,
@@ -390,7 +390,7 @@ class CommandRouter(CommandRoutable):
         if level_id is not None:
             level = await repositories.level.from_id(base_ctx, level_id)
             if level is None:
-                logger.error(
+                logging.error(
                     "Failed to resolve the command level!",
                     extra={"level_id": level_id},
                 )
@@ -400,7 +400,7 @@ class CommandRouter(CommandRoutable):
         if target_user_id is not None:
             target_user = await repositories.user.from_id(base_ctx, target_user_id)
             if target_user is None:
-                logger.error(
+                logging.error(
                     "Failed to resolve the command target user!",
                     extra={"target_user_id": target_user_id},
                 )
@@ -511,7 +511,7 @@ class CommandRouter(CommandRoutable):
 
 # Command specific event handlers
 async def _event_on_exception(ctx: CommandContext, exception: Exception) -> str:
-    logger.exception(
+    logging.exception(
         "An exception has occurred while executing command!",
         extra={
             "command_name": ctx.layer.name,
@@ -599,7 +599,7 @@ class Command(CommandRoutable):
 
         try:
             result = await self.handle(ctx, *params)
-            logger.info(
+            logging.info(
                 "Successfully executed command!",
                 extra={
                     "command_name": self.name,
@@ -610,7 +610,7 @@ class Command(CommandRoutable):
         except CommandException as e:
             return await self._event_interruption(ctx, e)
         except Exception as e:
-            logger.exception(
+            logging.exception(
                 "Failed to run command handler!",
                 extra={
                     "command_name": self.name,

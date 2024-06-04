@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi import Form
 from pydantic import EmailStr
 
-from rgdps import logger
+import logging
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
@@ -38,7 +38,7 @@ async def register_post(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "User registration failed.",
             extra={
                 "username": username,
@@ -54,7 +54,7 @@ async def register_post(
             case _:
                 return responses.fail()
 
-    logger.info(
+    logging.info(
         "User registration success.",
         extra={
             "user_id": result.id,
@@ -74,7 +74,7 @@ async def login_post(
 ):
     result = await user_credentials.authenticate_from_gjp2_name(ctx, username, gjp2)
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "User login failed",
             extra={
                 "username": username,
@@ -94,7 +94,7 @@ async def login_post(
             case _:
                 return responses.fail()
 
-    logger.info(
+    logging.info(
         "User login successful!",
         extra={
             "user_id": result.id,
@@ -113,7 +113,7 @@ async def user_info_get(
     target = await users.get(ctx, user.id, target_id, is_own)
 
     if isinstance(target, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view a profile.",
             extra={
                 "error": target.value,
@@ -129,7 +129,7 @@ async def user_info_get(
         and (not target.user.privileges & UserPrivileges.USER_PROFILE_PUBLIC)
         and (not user.privileges & UserPrivileges.USER_VIEW_PRIVATE_PROFILE)
     ):
-        logger.info(
+        logging.info(
             "Tried to view a profile with insufficient privileges.",
             extra={
                 "user_id": user.id,
@@ -138,7 +138,7 @@ async def user_info_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully viewed a profile.",
         extra={
             "user_id": user.id,
@@ -218,7 +218,7 @@ async def user_info_update(
     )
 
     if isinstance(res, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to update the profile.",
             # XXX: Maybe add the stats here.
             extra={
@@ -228,7 +228,7 @@ async def user_info_update(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully updated profile.",
         extra={
             "user_id": user.id,
@@ -266,7 +266,7 @@ async def user_settings_update(
     )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to update user settings.",
             extra={
                 "error": result.value,
@@ -281,7 +281,7 @@ async def user_settings_update(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully updated user settings.",
         extra={
             "user_id": user.id,
@@ -303,7 +303,7 @@ async def request_status_get(
     result = await users.request_status(ctx, user.id)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to get user request status.",
             extra={
                 "error": result.value,
@@ -312,7 +312,7 @@ async def request_status_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully got user request status.",
         extra={
             "user_id": user.id,
@@ -334,7 +334,7 @@ async def users_get(
     result = await users.search(ctx, page, PAGE_SIZE, query)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to search users.",
             extra={
                 "query": query,
@@ -343,7 +343,7 @@ async def users_get(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully searched users.",
         extra={
             "query": query,

@@ -7,6 +7,7 @@ run:
 		redis \
 		mysql \
 		meilisearch \
+		datadog \
 		realistikgdps
 
 run-bg:
@@ -14,6 +15,7 @@ run-bg:
 		redis \
 		mysql \
 		meilisearch \
+		datadog \
 		realistikgdps
 
 stop:
@@ -27,6 +29,9 @@ shell:
 
 pma:
 	docker compose up phpmyadmin
+
+datadog:
+	docker-compose up datadog
 
 converter:
 	APP_COMPONENT=converter docker compose up \

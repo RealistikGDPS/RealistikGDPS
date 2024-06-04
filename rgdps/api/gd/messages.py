@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi import Form
 
-from rgdps import logger
+import logging
 from rgdps.api import commands
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
@@ -48,7 +48,7 @@ async def message_post(
     )
 
     if isinstance(message, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to send message.",
             extra={
                 "sender_user_id": user.id,
@@ -58,7 +58,7 @@ async def message_post(
         )
         return responses.fail()
 
-    logger.info(
+    logging.info(
         "Successfully sent a message.",
         extra={
             "message_id": message.id,
@@ -94,7 +94,7 @@ async def messages_get(
         )
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view message list.",
             extra={
                 "user_id": user.id,
@@ -123,7 +123,7 @@ async def messages_get(
         if not is_sender_user_id and message.message.seen_ts is None:
             await messages.mark_message_as_seen(ctx, user.id, message.message.id)
 
-    logger.info(
+    logging.info(
         "Successfully viewed the messages list.",
         extra={
             "user_id": user.id,
@@ -144,7 +144,7 @@ async def message_get(
     result = await messages.get(ctx, user.id, message_id=message_id)
 
     if isinstance(result, ServiceError):
-        logger.info(
+        logging.info(
             "Failed to view message.",
             extra={
                 "user_id": user.id,
@@ -157,7 +157,7 @@ async def message_get(
     if result.message.seen_ts is None:
         await messages.mark_message_as_seen(ctx, user.id, result.message.id)
 
-    logger.info(
+    logging.info(
         "Successfully viewed message.",
         extra={
             "user_id": user.id,
@@ -191,7 +191,7 @@ async def message_delete(
     for message in messages_list:
         await messages.delete_by_user(ctx, user.id, message_id=message)
 
-    logger.info(
+    logging.info(
         "Successfully deleted message(s).",
         extra={
             "user_id": user.id,

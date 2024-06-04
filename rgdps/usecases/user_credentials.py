@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from rgdps import logger
+import logging
 from rgdps import repositories
 from rgdps.common import hashes
 from rgdps.common.context import Context
@@ -26,7 +26,7 @@ async def authenticate_plain(
     creds = await repositories.user_credential.from_user_id(ctx, user_id)
 
     if creds is None:
-        logger.warning(
+        logging.warning(
             "User has no credentials attached to them.",
             extra={
                 "user_id": user_id,
@@ -56,7 +56,7 @@ async def authenticate_plain(
             hashed_pw,
         )
 
-        logger.info(
+        logging.info(
             "Migrated user credentials to latest version.",
             extra={
                 "user_id": user_id,

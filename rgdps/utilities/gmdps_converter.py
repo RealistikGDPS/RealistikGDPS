@@ -18,7 +18,7 @@ from databases import DatabaseURL
 from meilisearch_python_sdk import AsyncClient as MeiliClient
 from redis.asyncio import Redis
 
-from rgdps import logger
+import logging
 from rgdps import repositories
 from rgdps import settings
 from rgdps.common import gd_obj
@@ -190,7 +190,7 @@ async def convert_songs(ctx: ConverterContext) -> None:
         try:
             size = float(song["size"])
         except ValueError:
-            logger.warning(
+            logging.warning(
                 "Converted song has an invalid file size!",
                 extra={
                     "song_id": song["ID"],
@@ -209,7 +209,7 @@ async def convert_songs(ctx: ConverterContext) -> None:
             author = author[:32]
 
         if len(download_url) > 256:
-            logger.warning(
+            logging.warning(
                 "Skipping song due to download URL being too long.",
                 extra={
                     "song_id": song["ID"],
@@ -239,7 +239,7 @@ async def convert_user_comments(ctx: ConverterContext) -> None:
     for comment in old_comments:
         account_id = ctx.user_id_map.get(comment["userID"])
         if account_id is None:
-            logger.warning(
+            logging.warning(
                 "Failed to find account ID for a userID when converting user comments.",
                 extra={
                     "user_id": comment["userID"],
@@ -255,7 +255,7 @@ async def convert_user_comments(ctx: ConverterContext) -> None:
         try:
             content = hashes.decode_base64(comment["comment"])[:256]
         except Exception:
-            logger.warning(
+            logging.warning(
                 "User comment had invalid base64 content. Skipped.",
                 extra={
                     "comment_id": comment["commentID"],
@@ -281,7 +281,7 @@ async def convert_level_comments(ctx: ConverterContext) -> None:
     for comment in old_comments:
         account_id = ctx.user_id_map.get(comment["userID"])
         if account_id is None:
-            logger.warning(
+            logging.warning(
                 "Failed to find account ID for a userID when converting level comments.",
                 extra={
                     "user_id": comment["userID"],
@@ -298,7 +298,7 @@ async def convert_level_comments(ctx: ConverterContext) -> None:
         try:
             content = hashes.decode_base64(comment["comment"])[:256]
         except Exception:
-            logger.warning(
+            logging.warning(
                 "User comment had invalid base64 content. Skipped.",
                 extra={
                     "comment_id": comment["commentID"],
@@ -396,7 +396,7 @@ async def convert_users(ctx: ConverterContext) -> None:
                 value=user["password"],
             )
         except Exception:
-            logger.exception(
+            logging.exception(
                 "Failed to convert user!",
                 extra={
                     "user_id": user_id,
@@ -572,75 +572,75 @@ async def convert_messages(ctx: ConverterContext) -> None:
 
 
 async def main() -> int:
-    logger.info("Starting the GMDPS -> RealistikGDPS converter.")
+    logging.info("Starting the GMDPS -> RealistikGDPS converter.")
     ctx = await get_context()
 
-    logger.info("Successfully connected!")
+    logging.info("Successfully connected!")
 
     try:
         if not await repositories.song.get_count(ctx):
-            logger.info("Converting songs...")
+            logging.info("Converting songs...")
             await convert_songs(ctx)
         else:
-            logger.info("Skipping song conversion, songs already exist.")
+            logging.info("Skipping song conversion, songs already exist.")
 
         if not await repositories.user.get_count(ctx):
-            logger.info("Converting users...")
+            logging.info("Converting users...")
             await convert_users(ctx)
         else:
-            logger.info("Skipping user conversion, users already exist.")
+            logging.info("Skipping user conversion, users already exist.")
 
         if not await repositories.level.get_count(ctx):
-            logger.info("Converting levels...")
+            logging.info("Converting levels...")
             await convert_levels(ctx)
         else:
-            logger.info("Skipping level conversion, levels already exist.")
+            logging.info("Skipping level conversion, levels already exist.")
 
         if not await repositories.user_comment.get_count(ctx):
-            logger.info("Converting user comments...")
+            logging.info("Converting user comments...")
             await convert_user_comments(ctx)
         else:
-            logger.info(
+            logging.info(
                 "Skipping user comment conversion, user comments already exist.",
             )
 
         if not await repositories.level_comment.get_count(ctx):
-            logger.info("Converting level comments...")
+            logging.info("Converting level comments...")
             await convert_level_comments(ctx)
         else:
-            logger.info(
+            logging.info(
                 "Skipping level comment conversion, level comments already exist.",
             )
 
         if not await repositories.friend_requests.get_count(ctx):
-            logger.info("Converting friend requests...")
+            logging.info("Converting friend requests...")
             await convert_friend_requests(ctx)
         else:
-            logger.info(
+            logging.info(
                 "Skipping friend requests conversion, friend requests already exist.",
             )
 
         if not await repositories.user_relationship.get_count(ctx):
-            logger.info("Converting user relationships...")
+            logging.info("Converting user relationships...")
             await convert_user_relationships(ctx)
         else:
-            logger.info(
+            logging.info(
                 "Skipping user relationships conversion, user relationships already exist.",
             )
 
         if not await repositories.message.get_count(ctx):
-            logger.info("Converting messages...")
+            logging.info("Converting messages...")
             await convert_messages(ctx)
         else:
-            logger.info(
+            logging.info(
                 "Skipping messages conversion, messages already exist.",
             )
     except Exception:
-        logger.exception(
+        logging.exception(
             "Failed to convert data!",
         )
 
-    logger.info("Migration complete!")
+    logging.info("Migration complete!")
     # TODO: Look into a better approach to stop docker
     # from restarting the container.
     while True:
