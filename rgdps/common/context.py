@@ -10,9 +10,9 @@ from redis.asyncio import Redis
 if TYPE_CHECKING:
     from rgdps.common.cache.base import AbstractAsyncCache
     from rgdps.models.user import User
-    from rgdps.services.boomlings import GeometryDashClient
-    from rgdps.services.mysql import AbstractMySQLService
-    from rgdps.services.storage import AbstractStorage
+    from rgdps.adapters.boomlings import GeometryDashClient
+    from rgdps.adapters.mysql import AbstractMySQLService
+    from rgdps.adapters.storage import AbstractStorage
 
 
 class Context(ABC):
@@ -31,10 +31,6 @@ class Context(ABC):
     @property
     @abstractmethod
     def storage(self) -> AbstractStorage: ...
-
-    @property
-    @abstractmethod
-    def user_cache(self) -> AbstractAsyncCache[User]: ...
 
     @property
     @abstractmethod

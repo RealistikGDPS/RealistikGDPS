@@ -6,7 +6,7 @@ from rgdps.api.commands.framework import unwrap_service
 from rgdps.constants.users import UserPrivileges
 from rgdps.models.rgb import RGB
 from rgdps.models.user import User
-from rgdps.usecases import users
+from rgdps.services import users
 
 router = CommandRouter("users_root")
 

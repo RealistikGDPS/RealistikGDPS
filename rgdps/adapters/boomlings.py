@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from enum import Enum
 from typing import Any
+from urllib.parse import unquote
 
 import httpx
+from pydantic import BaseModel
 
 from rgdps import logger
 from rgdps.common import gd_obj
@@ -96,6 +98,28 @@ type GDStatus[T] = T | GDRequestStatus
 type IntKeyResponse = dict[int, str]
 
 
+class BoomlingsSong(BaseModel):
+    """A model representing a song response from """
+
+    id: int
+    name: str
+    author_id: int
+    author: str
+    author_youtube: str | None
+    size: float
+    download_url: str
+
+class BoomlingURL:
+    """A class wrapping a URL retrieved from the Geometry Dash server.
+    Used for typing convenience."""
+
+    def __init__(self, url: str) -> None:
+        self._url = url
+
+    
+    def url(self) -> str:
+        return self._url
+
 class GeometryDashClient:
     """A client for interacting with the Geometry Dash servers."""
 
@@ -179,7 +203,7 @@ class GeometryDashClient:
 
         return content
 
-    async def get_song(self, song_id: int) -> GDStatus[IntKeyResponse]:
+    async def song_from_id(self, song_id: int) -> GDStatus[BoomlingsSong]:
         """Queries the official servers for a song with a given id. Parses
         the response into a dictionary."""
 
@@ -211,9 +235,18 @@ class GeometryDashClient:
             value_cast=str,
         )
 
-        return song_parsed
+        # Creating model.
+        return BoomlingsSong(
+            id=int(song_parsed[1]),
+            name=song_parsed[2],
+            author_id=int(song_parsed[3]),
+            author=song_parsed[4],
+            author_youtube=song_parsed[7] or None,
+            size=float(song_parsed[5]),
+            download_url=unquote(song_parsed[10]),
+        )
 
-    async def get_cdn_url(self) -> GDStatus[str]:
+    async def fetch_cdn_id(self) -> GDStatus[BoomlingURL]:
         """Queries the official servers for the URL for the official Geometry Dash
         song and SFX library."""
 
@@ -231,4 +264,4 @@ class GeometryDashClient:
                 )
 
         # No parsing required here.
-        return song_info
+        return BoomlingURL(song_info)

@@ -11,7 +11,7 @@ from rgdps.common import gd_obj
 from rgdps.constants.daily_chests import DailyChestView
 from rgdps.constants.errors import ServiceError
 from rgdps.models.user import User
-from rgdps.usecases import daily_chests
+from rgdps.services import daily_chests
 
 
 async def daily_chest_get(

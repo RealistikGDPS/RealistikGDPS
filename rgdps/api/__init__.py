@@ -11,7 +11,6 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from fastapi.responses import Response
 from fastapi_limiter import FastAPILimiter
-from meilisearch_python_sdk import AsyncClient as MeiliClient
 from redis.asyncio import Redis
 from starlette.middleware.base import RequestResponseEndpoint
 
@@ -20,11 +19,12 @@ from rgdps import settings
 from rgdps.common.cache.memory import SimpleAsyncMemoryCache
 from rgdps.common.cache.redis import SimpleRedisCache
 from rgdps.constants.responses import GenericResponse
-from rgdps.services.boomlings import GeometryDashClient
-from rgdps.services.mysql import MySQLService
-from rgdps.services.pubsub import listen_pubsubs
-from rgdps.services.storage import LocalStorage
-from rgdps.services.storage import S3Storage
+from rgdps.adapters.boomlings import GeometryDashClient
+from rgdps.adapters.mysql import MySQLService
+from rgdps.adapters.pubsub import listen_pubsubs
+from rgdps.adapters.storage import LocalStorage
+from rgdps.adapters.storage import S3Storage
+from rgdps.adapters import MeiliSearchClient
 
 from . import context
 from . import gd
@@ -132,8 +132,9 @@ def init_redis(app: FastAPI) -> None:
 
 
 def init_meili(app: FastAPI) -> None:
-    app.state.meili = MeiliClient(
-        f"http://{settings.MEILI_HOST}:{settings.MEILI_PORT}",
+    app.state.meili = MeiliSearchClient.from_host(
+        settings.MEILI_HOST,
+        settings.MEILI_PORT,
         settings.MEILI_KEY,
         timeout=10,
     )
@@ -199,26 +200,10 @@ def init_gd(app: FastAPI) -> None:
     )
 
 
-def init_cache_stateful(app: FastAPI) -> None:
-    app.state.user_cache = SimpleAsyncMemoryCache()
+def init_cache(app: FastAPI) -> None:
     app.state.password_cache = SimpleAsyncMemoryCache()
 
     logger.info("Initialised stateful caching.")
-
-
-def init_cache_stateless(app: FastAPI) -> None:
-    app.state.user_cache = SimpleRedisCache(
-        redis=app.state.redis,
-        key_prefix="rgdps:cache:user",
-    )
-    app.state.password_cache = SimpleRedisCache(
-        redis=app.state.redis,
-        key_prefix="rgdps:cache:password",
-        deserialise=lambda x: x.decode(),
-        serialise=lambda x: x.encode(),
-    )
-
-    logger.info("Initialised stateless caching.")
 
 
 def init_routers(app: FastAPI) -> None:
@@ -306,10 +291,7 @@ def init_api() -> FastAPI:
     else:
         init_local_storage(app)
 
-    if settings.SERVER_STATELESS:
-        init_cache_stateless(app)
-    else:
-        init_cache_stateful(app)
+    init_cache(app)
 
     init_routers(app)
 

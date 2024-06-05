@@ -9,7 +9,7 @@ from rgdps.api.context import HTTPContext
 from rgdps.common import gd_obj
 from rgdps.constants.errors import ServiceError
 from rgdps.constants.leaderboards import LeaderboardType
-from rgdps.usecases import leaderboards
+from rgdps.services import leaderboards
 
 
 async def leaderboard_get(

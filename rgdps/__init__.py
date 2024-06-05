@@ -5,6 +5,6 @@ from . import common
 from . import constants
 from . import models
 from . import repositories
-from . import services
+from . import adapters
 from . import settings
-from . import usecases
+from . import services

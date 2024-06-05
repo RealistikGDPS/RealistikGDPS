@@ -9,13 +9,13 @@ from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
 from rgdps.common import gd_obj
-from rgdps.common.validators import Base64String
+from rgdps.api.validators import Base64String
 from rgdps.constants.errors import ServiceError
 from rgdps.constants.likes import LikeType
 from rgdps.constants.users import UserPrivileges
 from rgdps.models.user import User
-from rgdps.usecases import likes
-from rgdps.usecases import user_comments
+from rgdps.services import likes
+from rgdps.services import user_comments
 
 PAGE_SIZE = 10
 

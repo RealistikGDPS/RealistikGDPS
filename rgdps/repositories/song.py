@@ -8,7 +8,7 @@ from rgdps.common import modelling
 from rgdps.common.context import Context
 from rgdps.constants.songs import SongSource
 from rgdps.models.song import Song
-from rgdps.services.boomlings import GDRequestStatus
+from rgdps.adapters.boomlings import GDRequestStatus
 
 ALL_FIELDS = modelling.get_model_fields(Song)
 CUSTOMISABLE_FIELDS = modelling.remove_id_field(ALL_FIELDS)
