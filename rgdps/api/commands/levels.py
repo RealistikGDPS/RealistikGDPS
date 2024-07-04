@@ -7,7 +7,7 @@ from rgdps.constants.levels import LevelDifficultyName
 from rgdps.constants.users import UserPrivileges
 from rgdps.models.level import Level
 from rgdps.models.user import User
-from rgdps.usecases import levels
+from rgdps.services import levels
 
 router = CommandRouter("levels_root")
 

@@ -9,10 +9,10 @@ from rgdps import settings
 from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
-from rgdps.common.validators import GameSaveData
+from rgdps.api.validators import GameSaveData
 from rgdps.constants.errors import ServiceError
 from rgdps.models.user import User
-from rgdps.usecases import save_data
+from rgdps.services import save_data
 
 
 async def save_data_get(

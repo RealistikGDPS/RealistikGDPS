@@ -7,13 +7,13 @@ from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
 from rgdps.common import gd_obj
-from rgdps.common.validators import Base64String
-from rgdps.common.validators import MessageContentString
+from rgdps.api.validators import Base64String
+from rgdps.api.validators import MessageContentString
 from rgdps.constants.errors import ServiceError
 from rgdps.constants.users import UserPrivileges
 from rgdps.models.message import MessageDirection
 from rgdps.models.user import User
-from rgdps.usecases import messages
+from rgdps.services import messages
 
 PAGE_SIZE = 10
 

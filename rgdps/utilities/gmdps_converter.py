@@ -38,9 +38,9 @@ from rgdps.constants.users import UserPrivacySetting
 from rgdps.constants.users import UserPrivileges
 from rgdps.constants.users import UserRelationshipType
 from rgdps.models.user import User
-from rgdps.services.boomlings import GeometryDashClient
-from rgdps.services.mysql import MySQLService
-from rgdps.services.storage import AbstractStorage
+from rgdps.adapters.boomlings import GeometryDashClient
+from rgdps.adapters.mysql import MySQLService
+from rgdps.adapters.storage import AbstractStorage
 
 if TYPE_CHECKING:
     from rgdps.common.cache.base import AbstractAsyncCache

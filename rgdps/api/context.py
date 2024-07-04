@@ -1,5 +1,6 @@
 # from __future__ import annotations # This causes a pydantic issue. Yikes.
-from typing import TYPE_CHECKING
+
+from typing import override
 
 from fastapi import FastAPI
 from fastapi import Request
@@ -9,43 +10,42 @@ from types_aiobotocore_s3 import S3Client
 
 from rgdps.common.cache.base import AbstractAsyncCache
 from rgdps.common.context import Context
-from rgdps.services.boomlings import GeometryDashClient
-from rgdps.services.mysql import AbstractMySQLService
-from rgdps.services.storage import AbstractStorage
-
-if TYPE_CHECKING:
-    from rgdps.models.user import User
+from rgdps.adapters.boomlings import GeometryDashClient
+from rgdps.adapters.mysql import AbstractMySQLService
+from rgdps.adapters.storage import AbstractStorage
 
 
 class HTTPContext(Context):
     def __init__(self, request: Request) -> None:
         self.request = request
 
+    @override
     @property
     def mysql(self) -> AbstractMySQLService:
         # NOTE: This is a per-request transaction.
         return self.request.state.mysql
 
+    @override
     @property
     def redis(self) -> Redis:
         return self.request.app.state.redis
 
+    @override
     @property
     def meili(self) -> MeiliClient:
         return self.request.app.state.meili
 
+    @override
     @property
     def storage(self) -> AbstractStorage:
         return self.request.app.state.storage
 
-    @property
-    def user_cache(self) -> "AbstractAsyncCache[User]":
-        return self.request.app.state.user_cache
-
+    @override
     @property
     def password_cache(self) -> AbstractAsyncCache[str]:
         return self.request.app.state.password_cache
 
+    @override
     @property
     def gd(self) -> GeometryDashClient:
         return self.request.app.state.gd
@@ -58,34 +58,37 @@ class PubsubContext(Context):
     def __init__(self, app: FastAPI) -> None:
         self.state = app.state
 
+    @override
     @property
     def mysql(self) -> AbstractMySQLService:
         return self.state.mysql
 
+    @override
     @property
     def redis(self) -> Redis:
         return self.state.redis
 
+    @override
     @property
     def meili(self) -> MeiliClient:
         return self.state.meili
 
+    @override
     @property
     def s3(self) -> S3Client | None:
         return self.state.s3
-
-    @property
-    def user_cache(self) -> "AbstractAsyncCache[User]":
-        return self.state.user_cache
-
+    
+    @override
     @property
     def password_cache(self) -> AbstractAsyncCache[str]:
         return self.state.password_cache
 
+    @override
     @property
     def storage(self) -> AbstractStorage:
         return self.state.storage
 
+    @override
     @property
     def gd(self) -> GeometryDashClient:
         return self.state.gd

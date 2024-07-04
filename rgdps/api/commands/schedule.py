@@ -5,7 +5,7 @@ from rgdps.api.commands.framework import CommandRouter
 from rgdps.api.commands.framework import unwrap_service
 from rgdps.constants.level_schedules import LevelScheduleType
 from rgdps.constants.users import UserPrivileges
-from rgdps.usecases import level_schedules
+from rgdps.services import level_schedules
 
 router = CommandRouter("schedule_root")
 

@@ -10,9 +10,9 @@ from rgdps.api import responses
 from rgdps.api.context import HTTPContext
 from rgdps.api.dependencies import authenticate_dependency
 from rgdps.common import gd_obj
-from rgdps.common.validators import Base64String
-from rgdps.common.validators import CommaSeparatedIntList
-from rgdps.common.validators import TextBoxString
+from rgdps.api.validators import Base64String
+from rgdps.api.validators import CommaSeparatedIntList
+from rgdps.api.validators import TextBoxString
 from rgdps.constants.errors import ServiceError
 from rgdps.constants.level_schedules import LevelScheduleType
 from rgdps.constants.levels import LevelDemonRating
@@ -21,9 +21,9 @@ from rgdps.constants.levels import LevelSearchType
 from rgdps.constants.levels import LevelFeature
 from rgdps.constants.users import UserPrivileges
 from rgdps.models.user import User
-from rgdps.usecases import level_schedules
-from rgdps.usecases import levels
-from rgdps.usecases import songs
+from rgdps.services import level_schedules
+from rgdps.services import levels
+from rgdps.services import songs
 
 PAGE_SIZE = 10
 

@@ -5,9 +5,9 @@ import asyncio
 from rgdps.api.commands.framework import CommandContext
 from rgdps.api.commands.framework import CommandRouter
 from rgdps.constants.users import UserPrivileges
-from rgdps.usecases import leaderboards
-from rgdps.usecases import levels
-from rgdps.usecases import users
+from rgdps.services import leaderboards
+from rgdps.services import levels
+from rgdps.services import users
 
 router = CommandRouter("sunc_root")
 

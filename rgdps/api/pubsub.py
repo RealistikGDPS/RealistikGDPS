@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from rgdps import logger
 from rgdps.common.context import Context
-from rgdps.services.pubsub import RedisPubsubRouter
-from rgdps.usecases import leaderboards
-from rgdps.usecases import levels
-from rgdps.usecases import users
+from rgdps.adapters.pubsub import RedisPubsubRouter
+from rgdps.services import leaderboards
+from rgdps.services import levels
+from rgdps.services import users
 
 router = RedisPubsubRouter()
 

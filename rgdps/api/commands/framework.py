@@ -29,9 +29,9 @@ if TYPE_CHECKING:
 
     from rgdps.common.cache.base import AbstractAsyncCache
     from rgdps.models.user import User
-    from rgdps.services.boomlings import GeometryDashClient
-    from rgdps.services.mysql import AbstractMySQLService
-    from rgdps.services.storage import AbstractStorage
+    from rgdps.adapters.boomlings import GeometryDashClient
+    from rgdps.adapters.mysql import AbstractMySQLService
+    from rgdps.adapters.storage import AbstractStorage
 
 
 # Private parsing functions.
@@ -236,10 +236,6 @@ class CommandContext(Context):
     @property
     def storage(self) -> AbstractStorage:
         return self._base_context.storage
-
-    @property
-    def user_cache(self) -> AbstractAsyncCache[User]:
-        return self._base_context.user_cache
 
     @property
     def password_cache(self) -> AbstractAsyncCache[str]:

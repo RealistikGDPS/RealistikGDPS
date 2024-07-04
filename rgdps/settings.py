@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def read_comma_separated_list(value: str) -> list[Any]:
+def read_comma_separated_list(value: str) -> list[str]:
     return [x.strip() for x in value.split(",")]
 
 
@@ -46,7 +46,6 @@ INTERNAL_RGDPS_DIRECTORY = os.getenv("INTERNAL_RGDPS_DIRECTORY", "./data")
 SERVER_NAME = os.environ["SERVER_NAME"]
 SERVER_COMMAND_PREFIX = os.environ["SERVER_COMMAND_PREFIX"]
 SERVER_GD_URL = os.environ["SERVER_GD_URL"]
-SERVER_STATELESS = read_boolean(os.environ["SERVER_STATELESS"])
 
 LOG_LEVEL = os.environ["LOG_LEVEL"]
 

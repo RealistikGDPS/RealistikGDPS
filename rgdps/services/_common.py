@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import TypeGuard
 
 
 class ServiceError(str, Enum):
@@ -66,3 +67,9 @@ class ServiceError(str, Enum):
 
     def __bool__(self) -> bool:
         return False
+    
+
+type ErrorOr[T] = T | ServiceError
+
+def is_service_error[T](result: ErrorOr[T]) -> TypeGuard[ServiceError]:
+    return isinstance(result, ServiceError)

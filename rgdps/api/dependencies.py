@@ -8,7 +8,7 @@ from fastapi import Form
 from fastapi.exceptions import HTTPException
 
 from rgdps import logger
-from rgdps import usecases
+from rgdps import services
 from rgdps.api.context import HTTPContext
 from rgdps.constants.errors import ServiceError
 from rgdps.constants.responses import GenericResponse
@@ -28,7 +28,7 @@ def authenticate_dependency(
         # A gjp2 is a hash thats always 40 characters long.
         gjp: str = Form(..., alias=password_alias, min_length=40, max_length=40),
     ) -> User:
-        user = await usecases.user_credentials.authenticate_from_gjp2(
+        user = await services.user_credentials.authenticate_from_gjp2(
             ctx,
             user_id,
             gjp,
@@ -78,7 +78,7 @@ def password_authenticate_dependency(
         username: str = Form(..., alias=username_alias),
         password_plain: str = Form(..., alias=password_alias),
     ) -> User:
-        user = await usecases.user_credentials.authenticate_from_name_plain(
+        user = await services.user_credentials.authenticate_from_name_plain(
             ctx,
             username,
             password_plain,
